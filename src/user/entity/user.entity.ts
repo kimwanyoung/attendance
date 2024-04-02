@@ -36,9 +36,9 @@ export class UserModel {
   @IsString()
   phone: string;
 
-  @OneToMany(() => VoteModel, (vote) => vote.user)
+  @OneToMany(() => VoteModel, (vote) => vote.user, { nullable: true })
   votes: VoteModel[];
 
-  @OneToMany(() => VotePostModel, (post) => post.author)
+  @OneToMany(() => VotePostModel, (post) => post.author, { nullable: true })
   posts: VotePostModel[];
 }

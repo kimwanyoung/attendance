@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GenderEnum } from './const/gender.enum';
 import { UserModel } from './entity/user.entity';
 
 @Injectable()
@@ -11,16 +10,38 @@ export class UserService {
     private readonly userRepository: Repository<UserModel>,
   ) {}
 
-  async createUserData() {
-    const user = this.userRepository.create({
-      email: 'testeamil@gmail.com',
-      age: 20,
-      gender: GenderEnum.FEMALE,
-      name: '완영',
-      password: 'password',
-      phone: '010-9483-5869',
+  async createUser(
+    user: Pick<
+      UserModel,
+      'email' | 'password' | 'age' | 'gender' | 'phone' | 'name'
+    >,
+  ) {
+    this.emailExistValidation(user.email);
+
+    const createdUser = this.userRepository.create({
+      ...user,
     });
 
-    return await this.userRepository.save(user);
+    return this.userRepository.save(createdUser);
+  }
+
+  async getUserByEmail(email: string) {
+    return await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+
+  private async emailExistValidation(email: string) {
+    const emailExists = await this.userRepository.exists({
+      where: {
+        email,
+      },
+    });
+
+    if (emailExists) {
+      throw new BadRequestException('이미 존재하는 이메일입니다.');
+    }
   }
 }

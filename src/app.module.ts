@@ -8,6 +8,7 @@ import { VoteModule } from './vote/vote.module';
 import { UserModel } from './user/entity/user.entity';
 import { VoteModel } from './vote/entity/vote.entity';
 import { VotePostModel } from './vote-post/entity/vote-post.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { VotePostModel } from './vote-post/entity/vote-post.entity';
     }),
     VoteModule,
     VotePostModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
