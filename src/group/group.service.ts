@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { GroupModel } from "./entity/group.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserService } from "../user/user.service";
-import { GenderEnum } from "../user/const/gender.enum";
-import { AuthService } from "../auth/auth.service";
-import { CreateGroupDto } from "./dto/create-group.dto";
+import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { GroupModel } from './entity/group.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from '../user/user.service';
+import { GenderEnum } from '../user/const/gender.enum';
+import { AuthService } from '../auth/auth.service';
+import { CreateGroupDto } from './dto/create-group.dto';
 
 @Injectable()
 export class GroupService {

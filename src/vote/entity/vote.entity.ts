@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { VotePostModel } from '../../vote-post/entity/vote-post.entity';
 

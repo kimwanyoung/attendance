@@ -1,4 +1,11 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from '../const/gender.enum';
 import { VotePostModel } from '../../vote-post/entity/vote-post.entity';

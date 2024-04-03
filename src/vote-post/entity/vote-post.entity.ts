@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { VoteModel } from '../../vote/entity/vote.entity';
 
