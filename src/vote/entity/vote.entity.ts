@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserModel } from '../../user/entity/user.entity';
 import { VotePostModel } from '../../vote-post/entity/vote-post.entity';
 
@@ -7,11 +7,11 @@ export class VoteModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => UserModel, (user) => user.votes)
-  user: UserModel[];
+  @ManyToOne(() => UserModel)
+  user: UserModel;
 
-  @ManyToMany(() => VotePostModel, (post) => post.votes)
-  posts: VotePostModel[];
+  @ManyToOne(() => VotePostModel, (post) => post.votes)
+  posts: VotePostModel;
 
   @Column()
   result: boolean;

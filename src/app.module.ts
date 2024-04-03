@@ -9,6 +9,8 @@ import { UserModel } from './user/entity/user.entity';
 import { VoteModel } from './vote/entity/vote.entity';
 import { VotePostModel } from './vote-post/entity/vote-post.entity';
 import { AuthModule } from './auth/auth.module';
+import { GroupModule } from './group/group.module';
+import { GroupModel } from './group/entity/group.entity';
 
 @Module({
   imports: [
@@ -20,12 +22,13 @@ import { AuthModule } from './auth/auth.module';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [UserModel, VoteModel, VotePostModel],
+      entities: [UserModel, VoteModel, VotePostModel, GroupModel],
       synchronize: true,
     }),
     VoteModule,
     VotePostModule,
     AuthModule,
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

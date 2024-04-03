@@ -1,8 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from '../const/gender.enum';
 import { VotePostModel } from '../../vote-post/entity/vote-post.entity';
 import { VoteModel } from '../../vote/entity/vote.entity';
+import { GroupModel } from '../../group/entity/group.entity';
 
 @Entity()
 export class UserModel {
@@ -41,4 +42,11 @@ export class UserModel {
 
   @OneToMany(() => VotePostModel, (post) => post.author, { nullable: true })
   posts: VotePostModel[];
+
+  @ManyToMany(() => GroupModel, (group) => group.user)
+  @JoinTable()
+  group: GroupModel[];
+
+  @OneToMany(() => GroupModel, (group) => group.owner)
+  create_group: GroupModel;
 }
