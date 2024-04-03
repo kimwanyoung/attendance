@@ -45,6 +45,29 @@ export class AuthService {
     return existUser;
   }
 
+  decodeBasicToken(base64String: string) {
+    const decoded = Buffer.from(base64String).toString('utf-8');
+    const split = decoded.split(':');
+
+    if (split.length !== 2) {
+      throw new UnauthorizedException('잘못된 유형의 토큰입니다.');
+    }
+
+    const email = split[0];
+
+    return email;
+  }
+
+  verifyToken(token: string) {
+    try {
+      return this.jwtService.verify(token, {
+        secret: JWT_SECRET,
+      });
+    } catch (e) {
+      throw new UnauthorizedException('토큰이 만료됐거나 잘못된 토큰입니다.');
+    }
+  }
+
   private async existUserValidate(email: string) {
     const existUser = await this.userService.getUserByEmail(email);
 
