@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -16,8 +17,11 @@ export class GroupModel {
   title: string;
 
   @ManyToMany(() => UserModel, (user) => user.group)
+  @JoinTable()
   user: UserModel[];
 
-  @ManyToOne(() => UserModel, { nullable: false })
+  @ManyToOne(() => UserModel, {
+    nullable: false,
+  })
   owner: UserModel;
 }

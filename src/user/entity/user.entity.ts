@@ -8,9 +8,8 @@ import {
 } from 'typeorm';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from '../const/gender.enum';
-import { VotePostModel } from '../../vote-post/entity/vote-post.entity';
-import { VoteModel } from '../../vote/entity/vote.entity';
 import { GroupModel } from '../../group/entity/group.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class UserModel {
@@ -36,6 +35,7 @@ export class UserModel {
   @IsString()
   email: string;
 
+  @Exclude({ toPlainOnly: true })
   @Column()
   @IsString()
   password: string;
@@ -44,16 +44,6 @@ export class UserModel {
   @IsString()
   phone: string;
 
-  @OneToMany(() => VoteModel, (vote) => vote.user, { nullable: true })
-  votes: VoteModel[];
-
-  @OneToMany(() => VotePostModel, (post) => post.author, { nullable: true })
-  posts: VotePostModel[];
-
-  @ManyToMany(() => GroupModel, (group) => group.user)
-  @JoinTable()
+  @ManyToMany(() => GroupModel, (group) => group.owner)
   group: GroupModel[];
-
-  @OneToMany(() => GroupModel, (group) => group.owner)
-  create_group: GroupModel;
 }

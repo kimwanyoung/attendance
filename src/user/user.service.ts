@@ -16,7 +16,7 @@ export class UserService {
       'email' | 'password' | 'age' | 'gender' | 'phone' | 'name'
     >,
   ) {
-    this.emailExistValidation(user.email);
+    await this.emailExistValidation(user.email);
 
     const createdUser = this.userRepository.create({
       ...user,

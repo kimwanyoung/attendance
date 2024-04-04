@@ -16,7 +16,7 @@ export class VoteModel {
   @ManyToOne(() => UserModel)
   user: UserModel;
 
-  @ManyToOne(() => VotePostModel, (post) => post.votes)
+  @ManyToOne(() => VotePostModel)
   posts: VotePostModel;
 
   @Column()

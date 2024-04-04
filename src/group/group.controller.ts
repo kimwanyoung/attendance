@@ -6,11 +6,6 @@ import { CreateGroupDto } from './dto/create-group.dto';
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  @Get()
-  async testCreate() {
-    return await this.groupService.createGroup();
-  }
-
   @Post()
   async createGroup(
     @Headers('authorization') rawToken: string,

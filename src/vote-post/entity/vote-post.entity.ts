@@ -7,9 +7,6 @@ export class VotePostModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => VoteModel, (vote) => vote.posts)
-  votes: VoteModel[];
-
-  @ManyToOne(() => UserModel, (user) => user.posts)
+  @ManyToOne(() => UserModel)
   author: UserModel;
 }

@@ -16,24 +16,6 @@ export class GroupService {
     private readonly authService: AuthService,
   ) {}
 
-  async createGroup() {
-    const user = await this.userService.createUser({
-      email: 'test@email.com',
-      age: 27,
-      password: 'password',
-      gender: GenderEnum.MALE,
-      phone: '010-1234-1234',
-      name: 'wanyoung',
-    });
-
-    const group = this.groupRepository.create({
-      owner: user,
-      user: [user],
-    });
-
-    return this.groupRepository.save(group);
-  }
-
   async createGroupByAccessToken(
     accessToken: string,
     groupData: CreateGroupDto,
