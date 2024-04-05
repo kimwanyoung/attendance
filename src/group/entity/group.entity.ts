@@ -1,11 +1,12 @@
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { MembershipModel } from '../../group-user/entity/group-user.entity';
 import { UserModel } from '../../user/entity/user.entity';
 
 @Entity()
@@ -16,12 +17,10 @@ export class GroupModel {
   @Column()
   title: string;
 
-  @ManyToMany(() => UserModel, (user) => user.group)
-  @JoinTable()
-  user: UserModel[];
+  @OneToMany(() => MembershipModel, (membership) => membership.group)
+  memberships: MembershipModel[];
 
-  @ManyToOne(() => UserModel, {
-    nullable: false,
-  })
-  owner: UserModel;
+  @ManyToOne(() => UserModel, (user) => user.createGroups)
+  @JoinColumn({ name: 'creatorId' })
+  creator: UserModel;
 }

@@ -87,7 +87,7 @@ export class AuthService {
   async authenticateWithEmailAndPassword(
     user: Pick<UserModel, 'email' | 'password'>,
   ) {
-    const existUser = await this.userService.getUserByEmail(user.email);
+    const existUser = await this.userService.findUserByEmail(user.email);
 
     if (!existUser) {
       throw new UnauthorizedException('존재하지 않는 사용자입니다.');
@@ -113,7 +113,7 @@ export class AuthService {
   }
 
   private async existUserValidate(email: string) {
-    const existUser = await this.userService.getUserByEmail(email);
+    const existUser = await this.userService.findUserByEmail(email);
 
     if (!existUser) {
       throw new BadRequestException('존재하지않는 이메일입니다.');

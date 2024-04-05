@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { GroupModel } from './entity/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '../user/user.service';
-import { GenderEnum } from '../user/const/gender.enum';
 import { AuthService } from '../auth/auth.service';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { UserModel } from '../user/entity/user.entity';
 
 @Injectable()
 export class GroupService {
@@ -16,19 +16,21 @@ export class GroupService {
     private readonly authService: AuthService,
   ) {}
 
-  async createGroupByAccessToken(
-    accessToken: string,
-    groupData: CreateGroupDto,
-  ) {
-    const email = this.authService.verifyToken(accessToken).email;
-    const user = await this.userService.getUserByEmail(email);
-
+  async createNewGroup(user: UserModel, groupData: CreateGroupDto) {
     const newGroup = this.groupRepository.create({
-      title: groupData.title,
-      owner: user,
-      user: [user],
+      creator: user,
+      memberships: [user],
+      ...groupData,
     });
 
     return await this.groupRepository.save(newGroup);
+  }
+
+  async findGroupById(groupId: number) {
+    return await this.groupRepository.findOne({
+      where: {
+        id: groupId,
+      },
+    });
   }
 }

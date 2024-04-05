@@ -25,7 +25,7 @@ export class UserService {
     return this.userRepository.save(createdUser);
   }
 
-  async getUserByEmail(email: string) {
+  async findUserByEmail(email: string) {
     return await this.userRepository.findOne({
       where: {
         email,

@@ -1,20 +1,22 @@
-import { Body, Controller, Get, Headers, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
 
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Post()
-  async createGroup(
-    @Headers('authorization') rawToken: string,
-    @Body() groupData: CreateGroupDto,
-  ) {
-    Logger.log(groupData.title);
-    return await this.groupService.createGroupByAccessToken(
-      rawToken,
-      groupData,
-    );
+  @UseGuards(AccessTokenGuard)
+  async createNewGroup(@Request() request: any, @Body() body: CreateGroupDto) {
+    const user = request.user;
+    return await this.groupService.createNewGroup(user, body);
   }
 }

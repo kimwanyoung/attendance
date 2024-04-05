@@ -1,15 +1,16 @@
 import {
   Column,
-  Entity,
+  Entity, IsNull, JoinColumn,
   JoinTable,
-  ManyToMany,
+  ManyToMany, ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from '../const/gender.enum';
 import { GroupModel } from '../../group/entity/group.entity';
 import { Exclude } from 'class-transformer';
+import { MembershipModel } from "../../group-user/entity/group-user.entity";
 
 @Entity()
 export class UserModel {
@@ -44,6 +45,9 @@ export class UserModel {
   @IsString()
   phone: string;
 
-  @ManyToMany(() => GroupModel, (group) => group.owner)
-  group: GroupModel[];
+  @OneToMany(() => MembershipModel, (membership) => membership.user)
+  memberships: MembershipModel[];
+
+  @OneToMany(() => GroupModel, (group) => group.creator)
+  createGroups: GroupModel[];
 }
