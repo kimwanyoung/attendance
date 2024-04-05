@@ -1,6 +1,6 @@
-import { Controller, Param, Post, Request, UseGuards } from "@nestjs/common";
+import { Controller, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { GroupUserService } from './group-user.service';
-import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
+import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
 
 @Controller('group-user')
 export class GroupUserController {

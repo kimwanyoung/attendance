@@ -31,6 +31,7 @@ export class GroupService {
       where: {
         id: groupId,
       },
+      relations: ['memberships'],
     });
   }
 }

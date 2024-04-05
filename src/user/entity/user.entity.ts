@@ -1,16 +1,19 @@
 import {
   Column,
-  Entity, IsNull, JoinColumn,
+  Entity,
+  IsNull,
+  JoinColumn,
   JoinTable,
-  ManyToMany, ManyToOne,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
-} from "typeorm";
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from '../const/gender.enum';
 import { GroupModel } from '../../group/entity/group.entity';
 import { Exclude } from 'class-transformer';
-import { MembershipModel } from "../../group-user/entity/group-user.entity";
+import { MembershipModel } from '../../group-user/entity/group-user.entity';
 
 @Entity()
 export class UserModel {

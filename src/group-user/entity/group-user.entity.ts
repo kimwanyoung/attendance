@@ -1,7 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { GroupModel } from '../../group/entity/group.entity';
-import { Status } from "../const/status.const";
+import { Status } from '../const/status.const';
 
 @Entity()
 export class MembershipModel {

@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -12,6 +14,11 @@ import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
+
+  @Get(':groupId')
+  async findGroup(@Param('groupId') groupId: number) {
+    return await this.groupService.findGroupById(groupId);
+  }
 
   @Post()
   @UseGuards(AccessTokenGuard)
