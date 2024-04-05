@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, Module } from "@nestjs/common";
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -11,7 +11,7 @@ import { VotePostModel } from './vote-post/entity/vote-post.entity';
 import { AuthModule } from './auth/auth.module';
 import { GroupModule } from './group/group.module';
 import { GroupModel } from './group/entity/group.entity';
-import { APP_INTERCEPTOR } from "@nestjs/core";
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
