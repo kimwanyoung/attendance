@@ -16,7 +16,7 @@ export class UserService {
       'email' | 'password' | 'age' | 'gender' | 'phone' | 'name'
     >,
   ) {
-    await this.emailExistValidation(user.email);
+    await this.duplicateValidation(user.email, user.phone);
 
     const createdUser = this.userRepository.create({
       ...user,
@@ -33,15 +33,17 @@ export class UserService {
     });
   }
 
-  private async emailExistValidation(email: string) {
-    const emailExists = await this.userRepository.exists({
-      where: {
-        email,
-      },
-    });
+  private async duplicateValidation(email: string, phone: string) {
+    const emailExists = await this.userRepository.existsBy({ email });
+
+    const phoneExists = await this.userRepository.existsBy({ phone });
 
     if (emailExists) {
       throw new BadRequestException('이미 존재하는 이메일입니다.');
+    }
+
+    if (phoneExists) {
+      throw new BadRequestException('이미 존재하는 휴대전화입니다.');
     }
   }
 }

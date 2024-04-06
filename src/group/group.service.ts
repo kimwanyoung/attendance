@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UserModel } from '../user/entity/user.entity';
+import { GroupUserService } from '../group-user/group-user.service';
 
 @Injectable()
 export class GroupService {
@@ -31,7 +32,7 @@ export class GroupService {
       where: {
         id: groupId,
       },
-      relations: ['memberships'],
+      relations: ['creator', 'memberships'],
     });
   }
 }

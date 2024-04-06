@@ -14,6 +14,7 @@ import { GenderEnum } from '../const/gender.enum';
 import { GroupModel } from '../../group/entity/group.entity';
 import { Exclude } from 'class-transformer';
 import { MembershipModel } from '../../group-user/entity/group-user.entity';
+import { Status } from "../../group-user/const/status.const";
 
 @Entity()
 export class UserModel {
