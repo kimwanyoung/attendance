@@ -8,11 +8,7 @@ import { AuthModule } from '../auth/auth.module';
 import { GroupUserModule } from '../group-user/group-user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([GroupModel]),
-    UserModule,
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forFeature([GroupModel]), UserModule, AuthModule],
   exports: [GroupService],
   controllers: [GroupController],
   providers: [GroupService],
