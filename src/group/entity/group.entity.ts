@@ -17,7 +17,9 @@ export class GroupModel {
   @Column()
   title: string;
 
-  @OneToMany(() => MembershipModel, (membership) => membership.group)
+  @OneToMany(() => MembershipModel, (membership) => membership.group, {
+    cascade: true,
+  })
   memberships: MembershipModel[];
 
   @ManyToOne(() => UserModel, (user) => user.createGroups)

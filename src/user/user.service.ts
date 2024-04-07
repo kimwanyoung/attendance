@@ -33,6 +33,12 @@ export class UserService {
     });
   }
 
+  async findAllUsers() {
+    return await this.userRepository.find({
+      relations: ['memberships', 'createGroups'],
+    });
+  }
+
   private async duplicateValidation(email: string, phone: string) {
     const emailExists = await this.userRepository.existsBy({ email });
 

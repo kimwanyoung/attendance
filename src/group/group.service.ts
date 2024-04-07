@@ -1,30 +1,39 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { EntityManager, Repository } from 'typeorm';
 import { GroupModel } from './entity/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from '../user/user.service';
-import { AuthService } from '../auth/auth.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UserModel } from '../user/entity/user.entity';
-import { GroupUserService } from '../group-user/group-user.service';
+import { MembershipModel } from '../group-user/entity/group-user.entity';
+import { Status } from '../group-user/const/status.const';
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectRepository(GroupModel)
     private readonly groupRepository: Repository<GroupModel>,
-    private readonly userService: UserService,
-    private readonly authService: AuthService,
+    private readonly entityManager: EntityManager,
   ) {}
 
   async createNewGroup(user: UserModel, groupData: CreateGroupDto) {
-    const newGroup = this.groupRepository.create({
-      creator: user,
-      memberships: [user],
-      ...groupData,
-    });
+    return await this.entityManager.transaction(async (transactionEm) => {
+      const newGroup = this.groupRepository.create({
+        creator: user,
+        ...groupData,
+      });
 
-    return await this.groupRepository.save(newGroup);
+      await transactionEm.save(newGroup);
+
+      const membership = transactionEm.create(MembershipModel, {
+        user: user,
+        group: newGroup,
+        status: Status.APPROVED,
+      });
+
+      await transactionEm.save(membership);
+
+      return newGroup;
+    });
   }
 
   async findGroupById(groupId: number) {

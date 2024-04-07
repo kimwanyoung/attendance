@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,7 +9,7 @@ import { Repository } from 'typeorm';
 import { MembershipModel } from './entity/group-user.entity';
 import { Status } from './const/status.const';
 import { ApprovalDto } from './dto/approval.dto';
-import { GroupService } from '../group/group.service';
+import { GroupModel } from '../group/entity/group.entity';
 
 @Injectable()
 export class GroupUserService {
@@ -33,7 +32,6 @@ export class GroupUserService {
     const waitList = await this.membershipRepository.find({
       where: {
         group: { id: groupId },
-        status: Status.PENDING,
       },
       relations: ['user'],
     });
@@ -66,5 +64,13 @@ export class GroupUserService {
     });
     findUser.status = Status.APPROVED;
     return await this.membershipRepository.save(findUser);
+  }
+
+  async createMembership(user: UserModel, group: GroupModel, status: Status) {
+    return this.membershipRepository.create({
+      user,
+      group,
+      status,
+    });
   }
 }
