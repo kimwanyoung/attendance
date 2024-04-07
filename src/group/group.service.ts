@@ -4,7 +4,7 @@ import { GroupModel } from './entity/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UserModel } from '../user/entity/user.entity';
-import { MembershipModel } from '../group-user/entity/group-user.entity';
+import { MembershipModel } from '../group-user/entity/membership.entity';
 import { Status } from '../group-user/const/status.const';
 
 @Injectable()

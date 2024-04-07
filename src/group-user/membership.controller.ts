@@ -7,18 +7,13 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { GroupUserService } from './group-user.service';
+import { MembershipService } from './membership.service';
 import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
 import { ApprovalDto } from './dto/approval.dto';
 
 @Controller('group-user')
-export class GroupUserController {
-  constructor(private readonly groupUserService: GroupUserService) {}
-
-  @Get(':groupId')
-  async findAllWaitUsers(@Param('groupId') groupId: number) {
-    return await this.groupUserService.findWaitListByGroupId(groupId);
-  }
+export class MembershipController {
+  constructor(private readonly groupUserService: MembershipService) {}
 
   @Post('approval')
   @UseGuards(AccessTokenGuard)

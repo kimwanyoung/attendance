@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MembershipModel } from '../../group-user/entity/group-user.entity';
+import { MembershipModel } from '../../group-user/entity/membership.entity';
 import { UserModel } from '../../user/entity/user.entity';
 
 @Entity()
@@ -17,12 +17,7 @@ export class GroupModel {
   @Column()
   title: string;
 
-  @OneToMany(() => MembershipModel, (membership) => membership.group, {
-    cascade: true,
-  })
-  memberships: MembershipModel[];
-
-  @ManyToOne(() => UserModel, (user) => user.createGroups)
+  @ManyToOne(() => UserModel)
   @JoinColumn({ name: 'creatorId' })
   creator: UserModel;
 }

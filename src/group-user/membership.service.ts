@@ -7,13 +7,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from '../user/entity/user.entity';
 import { Repository } from 'typeorm';
-import { MembershipModel } from './entity/group-user.entity';
+import { MembershipModel } from './entity/membership.entity';
 import { Status } from './const/status.const';
 import { ApprovalDto } from './dto/approval.dto';
 import { GroupModel } from '../group/entity/group.entity';
 
 @Injectable()
-export class GroupUserService {
+export class MembershipService {
   constructor(
     @InjectRepository(MembershipModel)
     private readonly membershipRepository: Repository<MembershipModel>,
@@ -38,17 +38,6 @@ export class GroupUserService {
     });
 
     return this.membershipRepository.save(membership);
-  }
-
-  async findWaitListByGroupId(groupId: number) {
-    const waitList = await this.membershipRepository.find({
-      where: {
-        group: { id: groupId },
-      },
-      relations: ['user'],
-    });
-
-    return waitList;
   }
 
   async approvalJoinGroup(creatorId: number, approvalDto: ApprovalDto) {
@@ -78,11 +67,12 @@ export class GroupUserService {
     return await this.membershipRepository.save(findUser);
   }
 
-  async createMembership(user: UserModel, group: GroupModel, status: Status) {
-    return this.membershipRepository.create({
-      user,
-      group,
-      status,
+  async findMembershipByGroupId(groupId: number) {
+    return await this.membershipRepository.findOne({
+      where: {
+        group: { id: groupId },
+      },
+      relations: ['group', 'group.creator'],
     });
   }
 }

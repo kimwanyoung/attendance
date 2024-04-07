@@ -14,11 +14,11 @@ export class MembershipModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserModel, (user) => user.memberships)
+  @ManyToOne(() => UserModel)
   @JoinColumn({ name: 'userId' })
   user: UserModel;
 
-  @ManyToOne(() => GroupModel, (group) => group.memberships)
+  @ManyToOne(() => GroupModel)
   @JoinColumn({ name: 'groupId' })
   group: GroupModel;
 
