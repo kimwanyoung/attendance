@@ -15,11 +15,9 @@ export class MembershipModel {
   id: number;
 
   @ManyToOne(() => UserModel)
-  @JoinColumn({ name: 'userId' })
   user: UserModel;
 
   @ManyToOne(() => GroupModel)
-  @JoinColumn({ name: 'groupId' })
   group: GroupModel;
 
   @Column({

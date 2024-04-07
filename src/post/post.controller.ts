@@ -1,16 +1,22 @@
-import { Body, Controller, Get, Param, Post, Request, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { PostService } from './post.service';
-import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
-import { CreatePostDto } from "./dto/create-post.dto";
+import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
+import { CreatePostDto } from './dto/create-post.dto';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get(':groupId')
-  async findAllPostsByGrouId(
-    @Param('groupId') groupId: number,
-  ) {
+  async findAllPostsByGrouId(@Param('groupId') groupId: number) {
     return this.postService.findAllPosts(groupId);
   }
 

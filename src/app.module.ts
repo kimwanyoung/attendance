@@ -12,8 +12,8 @@ import { MembershipModule } from './group-user/membership.module';
 import { MembershipModel } from './group-user/entity/membership.entity';
 import { PostModule } from './post/post.module';
 import { VoteModule } from './vote/vote.module';
-import { PostModel } from "./post/entity/post.entity";
-import { VoteModel } from "./vote/entities/vote.entity";
+import { PostModel } from './post/entity/post.entity';
+import { VoteModel } from './vote/entities/vote.entity';
 
 @Module({
   imports: [

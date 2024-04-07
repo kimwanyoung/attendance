@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { GroupModel } from '../../group/entity/group.entity';
 
@@ -20,7 +27,7 @@ export class PostModel {
   updatedAt: Date;
 
   @ManyToOne(() => UserModel)
-  user: UserModel;
+  author: UserModel;
 
   @ManyToOne(() => GroupModel)
   group: GroupModel;
