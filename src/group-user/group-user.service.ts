@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -19,6 +20,17 @@ export class GroupUserService {
   ) {}
 
   async applyToJoinGroup(user: UserModel, groupId: number) {
+    const existsUser = await this.membershipRepository.findOne({
+      where: {
+        group: { id: groupId },
+        user: { id: user.id },
+      },
+    });
+
+    if (existsUser) {
+      throw new BadRequestException('이미 가입된 유저입니다.');
+    }
+
     const membership = this.membershipRepository.create({
       user,
       group: { id: groupId },
