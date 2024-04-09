@@ -1,6 +1,8 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { PostModel } from '../../post/entity/post.entity';
+import { VoteStatus } from '../const/vote.const';
+import { IsEnum } from 'class-validator';
 
 @Entity()
 export class VoteModel {
@@ -12,4 +14,11 @@ export class VoteModel {
 
   @ManyToOne(() => PostModel)
   post: PostModel;
+
+  @Column({
+    type: 'enum',
+    enum: VoteStatus,
+  })
+  @IsEnum(VoteStatus)
+  vote_status: VoteStatus;
 }

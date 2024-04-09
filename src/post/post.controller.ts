@@ -16,7 +16,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get(':groupId')
-  async findAllPostsByGrouId(@Param('groupId') groupId: number) {
+  async findAllPostsByGroupId(@Param('groupId') groupId: number) {
     return this.postService.findAllPosts(groupId);
   }
 

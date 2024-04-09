@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UserModel } from '../../user/entity/user.entity';
 import { GroupModel } from '../../group/entity/group.entity';
+import { VoteModel } from "../../vote/entities/vote.entity";
 
 @Entity()
 export class PostModel {

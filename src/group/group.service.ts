@@ -17,7 +17,7 @@ export class GroupService {
 
   async createNewGroup(user: UserModel, groupData: CreateGroupDto) {
     return await this.entityManager.transaction(async (transactionEm) => {
-      const newGroup = this.groupRepository.create({
+      const newGroup = transactionEm.create(GroupModel, {
         creator: user,
         ...groupData,
       });
