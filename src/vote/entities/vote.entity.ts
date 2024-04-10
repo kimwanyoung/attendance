@@ -20,5 +20,5 @@ export class VoteModel {
     enum: VoteStatus,
   })
   @IsEnum(VoteStatus)
-  vote_status: VoteStatus;
+  voteStatus: VoteStatus;
 }

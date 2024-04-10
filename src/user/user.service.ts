@@ -39,6 +39,14 @@ export class UserService {
     });
   }
 
+  async findUserById(userId: number) {
+    return await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+  }
+
   private async duplicateValidation(email: string, phone: string) {
     const emailExists = await this.userRepository.existsBy({ email });
 

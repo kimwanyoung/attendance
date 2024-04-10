@@ -17,6 +17,7 @@ import { GroupModule } from '../group/group.module';
     GroupModule,
     MembershipModule,
   ],
+  exports: [PostService],
   controllers: [PostController],
   providers: [PostService],
 })

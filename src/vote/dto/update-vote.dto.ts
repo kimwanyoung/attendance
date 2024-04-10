@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateVoteDto } from './create-vote.dto';
+import { VoteStatus } from '../const/vote.const';
 
-export class UpdateVoteDto extends PartialType(CreateVoteDto) {}
+export class UpdateVoteDto {
+  userId: number;
+  postId: number;
+  groupId: number;
+  voteStatus: VoteStatus;
+}

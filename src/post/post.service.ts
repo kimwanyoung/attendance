@@ -37,6 +37,15 @@ export class PostService {
     });
   }
 
+  async findPostById(groupId: number, postId: number) {
+    return await this.postRepository.findOne({
+      where: {
+        id: postId,
+        group: { id: groupId },
+      },
+    });
+  }
+
   private async isCreatorValidation(userId: number, groupId: number) {
     const group = await this.groupService.findGroupById(groupId);
     if (userId !== group.creator.id) {

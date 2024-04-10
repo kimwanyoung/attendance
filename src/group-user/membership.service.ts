@@ -75,4 +75,16 @@ export class MembershipService {
       relations: ['group', 'group.creator'],
     });
   }
+
+  async findMembershipByUserIdAndGroupId(userId: number, groupId: number) {
+    const membership = this.membershipRepository.findOne({
+      where: {
+        user: { id: userId },
+        group: { id: groupId },
+      },
+      relations: ['status'],
+    });
+
+    return membership;
+  }
 }
