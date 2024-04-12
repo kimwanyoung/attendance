@@ -44,4 +44,12 @@ export class GroupService {
       relations: ['creator'],
     });
   }
+
+  async findAllGroups(userId: number) {
+    return await this.groupRepository.find({
+      where: {
+
+      }
+    })
+  }
 }

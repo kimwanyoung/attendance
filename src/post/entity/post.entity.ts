@@ -20,6 +20,12 @@ export class PostModel {
   @Column()
   contents: string;
 
+  @Column()
+  startDate: Date;
+
+  @Column()
+  endDate: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

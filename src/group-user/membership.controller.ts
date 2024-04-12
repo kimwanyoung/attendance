@@ -11,7 +11,7 @@ import { MembershipService } from './membership.service';
 import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
 import { ApprovalDto } from './dto/approval.dto';
 
-@Controller('group-user')
+@Controller('membership')
 export class MembershipController {
   constructor(private readonly groupUserService: MembershipService) {}
 
@@ -33,5 +33,12 @@ export class MembershipController {
   async applyUser(@Request() request: any, @Param('groupId') groupId: number) {
     const user = request.user;
     return await this.groupUserService.applyToJoinGroup(user, groupId);
+  }
+
+  @Get()
+  @UseGuards(AccessTokenGuard)
+  async findAllGroupsByUserId(@Request() request: any) {
+    const userId = request.user.id;
+    return await this.groupUserService.findAllGroupsByUserId(userId);
   }
 }

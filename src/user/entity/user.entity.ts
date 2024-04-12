@@ -25,10 +25,6 @@ export class UserModel {
   @IsString()
   name: string;
 
-  @Column()
-  @IsNumber()
-  age: number;
-
   @Column({
     type: 'enum',
     enum: GenderEnum,

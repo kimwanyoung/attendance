@@ -17,6 +17,9 @@ export class GroupModel {
   @Column()
   title: string;
 
+  @Column()
+  description: string;
+
   @ManyToOne(() => UserModel)
   @JoinColumn({ name: 'creatorId' })
   creator: UserModel;

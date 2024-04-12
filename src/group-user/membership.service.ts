@@ -1,16 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserModel } from '../user/entity/user.entity';
-import { Repository } from 'typeorm';
-import { MembershipModel } from './entity/membership.entity';
-import { Status } from './const/status.const';
-import { ApprovalDto } from './dto/approval.dto';
-import { GroupModel } from '../group/entity/group.entity';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { UserModel } from "../user/entity/user.entity";
+import { Repository } from "typeorm";
+import { MembershipModel } from "./entity/membership.entity";
+import { Status } from "./const/status.const";
+import { ApprovalDto } from "./dto/approval.dto";
 
 @Injectable()
 export class MembershipService {
@@ -65,6 +59,29 @@ export class MembershipService {
     });
     findUser.status = Status.APPROVED;
     return await this.membershipRepository.save(findUser);
+  }
+
+  async findAllGroupsByUserId(userId: number) {
+    const groups = await this.membershipRepository
+      .createQueryBuilder('membership')
+      .leftJoinAndSelect('membership.group', 'group')
+      .leftJoin('membership.user', 'user')
+      .where('user.id = :userId', { userId })
+      .andWhere('membership.status = :status', { status: Status.APPROVED })
+      .select(['group.id', 'group.title', 'group.description'])
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(membership.id)', 'memberCount')
+          .from(MembershipModel, 'membership')
+          .where('membership.groupId = group.id');
+      }, 'memberCount')
+      .groupBy('group.id')
+      .getRawMany();
+
+    return groups.map((group) => ({
+      ...group,
+      memberCount: parseInt(group.memberCount, 10)
+    }));
   }
 
   async findMembershipByGroupId(groupId: number) {

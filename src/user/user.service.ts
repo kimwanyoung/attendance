@@ -11,10 +11,7 @@ export class UserService {
   ) {}
 
   async createUser(
-    user: Pick<
-      UserModel,
-      'email' | 'password' | 'age' | 'gender' | 'phone' | 'name'
-    >,
+    user: Pick<UserModel, 'email' | 'password' | 'gender' | 'phone' | 'name'>,
   ) {
     await this.duplicateValidation(user.email, user.phone);
 
