@@ -47,9 +47,7 @@ export class GroupService {
 
   async findAllGroups(userId: number) {
     return await this.groupRepository.find({
-      where: {
-
-      }
-    })
+      where: {},
+    });
   }
 }

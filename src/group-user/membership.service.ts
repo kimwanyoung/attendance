@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserModel } from "../user/entity/user.entity";
-import { Repository } from "typeorm";
-import { MembershipModel } from "./entity/membership.entity";
-import { Status } from "./const/status.const";
-import { ApprovalDto } from "./dto/approval.dto";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserModel } from '../user/entity/user.entity';
+import { Repository } from 'typeorm';
+import { MembershipModel } from './entity/membership.entity';
+import { Status } from './const/status.const';
+import { ApprovalDto } from './dto/approval.dto';
 
 @Injectable()
 export class MembershipService {
@@ -84,28 +89,7 @@ export class MembershipService {
 
     return groups.map((group) => ({
       ...group,
-      memberCount: parseInt(group.memberCount, 10)
+      memberCount: parseInt(group.memberCount, 10),
     }));
-  }
-
-  async findMembershipByGroupId(groupId: number) {
-    return await this.membershipRepository.findOne({
-      where: {
-        group: { id: groupId },
-      },
-      relations: ['group', 'group.creator'],
-    });
-  }
-
-  async findMembershipByUserIdAndGroupId(userId: number, groupId: number) {
-    const membership = this.membershipRepository.findOne({
-      where: {
-        user: { id: userId },
-        group: { id: groupId },
-      },
-      relations: ['status'],
-    });
-
-    return membership;
   }
 }
