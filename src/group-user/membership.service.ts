@@ -68,7 +68,11 @@ export class MembershipService {
       .leftJoin('membership.user', 'user')
       .where('user.id = :userId', { userId })
       .andWhere('membership.status = :status', { status: Status.APPROVED })
-      .select(['group.id', 'group.title', 'group.description'])
+      .select([
+        'group.id AS id',
+        'group.title AS title',
+        'group.description AS description',
+      ])
       .addSelect((subQuery) => {
         return subQuery
           .select('COUNT(membership.id)', 'memberCount')
