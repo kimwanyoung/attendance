@@ -6,7 +6,7 @@ import { UserModel } from '../user/entity/user.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { MembershipService } from '../group-user/membership.service';
 import { GroupService } from '../group/group.service';
-import { calculateEndDate } from "../libs/calculateDate";
+import { calculateEndDate } from '../libs/calculateDate';
 
 @Injectable()
 export class PostService {
