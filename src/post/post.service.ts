@@ -6,6 +6,7 @@ import { UserModel } from '../user/entity/user.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { MembershipService } from '../group-user/membership.service';
 import { GroupService } from '../group/group.service';
+import { calculateEndDate } from "../libs/calculateDate";
 
 @Injectable()
 export class PostService {
@@ -18,11 +19,19 @@ export class PostService {
 
   async createPost(user: UserModel, groupId: number, postData: CreatePostDto) {
     await this.isCreatorValidation(user.id, groupId);
+
     const group = await this.groupService.findGroupById(groupId);
+
+    const endDate = calculateEndDate(postData.voteDuration);
+
     const post = this.postRepository.create({
       author: user,
       group,
-      ...postData,
+      title: postData.title,
+      contents: postData.contents,
+      location: postData.location,
+      eventDate: postData.eventDate,
+      endDate,
     });
 
     return await this.postRepository.save(post);

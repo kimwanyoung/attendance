@@ -21,7 +21,10 @@ export class PostModel {
   contents: string;
 
   @Column()
-  startDate: Date;
+  location: string;
+
+  @Column()
+  eventDate: Date;
 
   @Column()
   endDate: Date;
