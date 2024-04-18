@@ -1,20 +1,28 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { PostModel } from './entity/post.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserModel } from '../user/entity/user.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { MembershipService } from '../group-user/membership.service';
-import { GroupService } from '../group/group.service';
-import { calculateEndDate } from '../libs/calculateDate';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { EntityManager, Repository } from "typeorm";
+import { PostModel } from "./entity/post.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { UserModel } from "../user/entity/user.entity";
+import { CreatePostDto } from "./dto/create-post.dto";
+import { GroupService } from "../group/group.service";
+import { calculateEndDate } from "../libs/calculateDate";
+import { VoteService } from "../vote/vote.service";
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(PostModel)
     private readonly postRepository: Repository<PostModel>,
-    private readonly membershipService: MembershipService,
+    @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService,
+    @Inject(forwardRef(() => VoteService))
+    private readonly voteService: VoteService,
+    private readonly entityManager: EntityManager,
   ) {}
 
   async createPost(user: UserModel, groupId: number, postData: CreatePostDto) {
@@ -42,7 +50,7 @@ export class PostService {
       where: {
         group: { id: groupId },
       },
-      relations: ['author'],
+      relations: ["author"],
     });
   }
 
@@ -52,13 +60,14 @@ export class PostService {
         id: postId,
         group: { id: groupId },
       },
+      relations: ["author"],
     });
   }
 
   private async isCreatorValidation(userId: number, groupId: number) {
     const group = await this.groupService.findGroupById(groupId);
     if (userId !== group.creator.id) {
-      throw new UnauthorizedException('글 작성 권한이 없습니다.');
+      throw new UnauthorizedException("글 작성 권한이 없습니다.");
     }
   }
 }

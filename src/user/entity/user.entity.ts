@@ -8,13 +8,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { GenderEnum } from '../const/gender.enum';
-import { GroupModel } from '../../group/entity/group.entity';
-import { Exclude } from 'class-transformer';
-import { MembershipModel } from '../../group-user/entity/membership.entity';
-import { Status } from '../../group-user/const/status.const';
+} from "typeorm";
+import { IsEnum, IsNumber, IsString } from "class-validator";
+import { GenderEnum } from "../const/gender.enum";
+import { GroupModel } from "../../group/entity/group.entity";
+import { Exclude } from "class-transformer";
+import { MembershipModel } from "../../group-user/entity/membership.entity";
+import { Status } from "../../group-user/const/status.const";
 
 @Entity()
 export class UserModel {
@@ -26,7 +26,7 @@ export class UserModel {
   name: string;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: GenderEnum,
   })
   @IsEnum(GenderEnum)

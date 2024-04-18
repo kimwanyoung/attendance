@@ -4,9 +4,9 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { AuthService } from '../auth.service';
-import { UserService } from '../../user/user.service';
+} from "@nestjs/common";
+import { AuthService } from "../auth.service";
+import { UserService } from "../../user/user.service";
 
 @Injectable()
 abstract class BearerTokenGuard implements CanActivate {
@@ -18,10 +18,10 @@ abstract class BearerTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const rawToken = request.headers['authorization'];
+    const rawToken = request.headers["authorization"];
 
     if (!rawToken) {
-      throw new BadRequestException('토큰이 없습니다.');
+      throw new BadRequestException("토큰이 없습니다.");
     }
 
     const token = this.authService.extractTokenFromHeader(rawToken, true);
@@ -43,8 +43,8 @@ export class AccessTokenGuard extends BearerTokenGuard {
 
     const request = context.switchToHttp().getRequest();
 
-    if (request.tokenType !== 'access') {
-      throw new UnauthorizedException('Access Token이 아닙니다.');
+    if (request.tokenType !== "access") {
+      throw new UnauthorizedException("Access Token이 아닙니다.");
     }
 
     return true;
@@ -58,8 +58,8 @@ export class RefreshTokenGuard extends BearerTokenGuard {
 
     const request = context.switchToHttp().getRequest();
 
-    if (request.tokenType !== 'refresh') {
-      throw new UnauthorizedException('Refresh Token이 아닙니다.');
+    if (request.tokenType !== "refresh") {
+      throw new UnauthorizedException("Refresh Token이 아닙니다.");
     }
 
     return true;

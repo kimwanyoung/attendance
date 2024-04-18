@@ -6,18 +6,29 @@ import {
   Post,
   Request,
   UseGuards,
-} from '@nestjs/common';
-import { GroupService } from './group.service';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
+} from "@nestjs/common";
+import { GroupService } from "./group.service";
+import { CreateGroupDto } from "./dto/create-group.dto";
+import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
 
-@Controller('group')
+@Controller("group")
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  @Get(':groupId')
-  async findGroup(@Param('groupId') groupId: number) {
+  @Get(":groupId")
+  async findGroup(@Param("groupId") groupId: number) {
     return await this.groupService.findGroupById(groupId);
+  }
+
+  @Get(":groupId/post/:postId")
+  @UseGuards(AccessTokenGuard)
+  async findPostDetail(
+    @Request() request: any,
+    @Param("groupId") groupId: number,
+    @Param("postId") postId: number,
+  ) {
+    const user = request.user;
+    return await this.groupService.findPostDetail(groupId, postId);
   }
 
   @Post()

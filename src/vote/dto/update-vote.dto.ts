@@ -1,4 +1,4 @@
-import { VoteStatus } from '../const/vote.const';
+import { VoteStatus } from "../const/vote.const";
 
 export class UpdateVoteDto {
   userId: number;

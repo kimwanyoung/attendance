@@ -5,9 +5,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { UserModel } from '../../user/entity/user.entity';
-import { GroupModel } from '../../group/entity/group.entity';
+} from "typeorm";
+import { UserModel } from "../../user/entity/user.entity";
+import { GroupModel } from "../../group/entity/group.entity";
 
 @Entity()
 export class PostModel {

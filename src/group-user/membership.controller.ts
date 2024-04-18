@@ -6,16 +6,16 @@ import {
   Post,
   Request,
   UseGuards,
-} from '@nestjs/common';
-import { MembershipService } from './membership.service';
-import { AccessTokenGuard } from '../auth/guards/bearer-token.guard';
-import { ApprovalDto } from './dto/approval.dto';
+} from "@nestjs/common";
+import { MembershipService } from "./membership.service";
+import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
+import { ApprovalDto } from "./dto/approval.dto";
 
-@Controller('membership')
+@Controller("membership")
 export class MembershipController {
   constructor(private readonly groupUserService: MembershipService) {}
 
-  @Post('approval')
+  @Post("approval")
   @UseGuards(AccessTokenGuard)
   async approvalUser(
     @Request() request: any,
@@ -28,9 +28,9 @@ export class MembershipController {
     );
   }
 
-  @Post('apply/:groupId')
+  @Post("apply/:groupId")
   @UseGuards(AccessTokenGuard)
-  async applyUser(@Request() request: any, @Param('groupId') groupId: number) {
+  async applyUser(@Request() request: any, @Param("groupId") groupId: number) {
     const user = request.user;
     return await this.groupUserService.applyToJoinGroup(user, groupId);
   }

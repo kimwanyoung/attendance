@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserModel } from './entity/user.entity';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { UserModel } from "./entity/user.entity";
 
 @Injectable()
 export class UserService {
@@ -11,7 +11,7 @@ export class UserService {
   ) {}
 
   async createUser(
-    user: Pick<UserModel, 'email' | 'password' | 'gender' | 'phone' | 'name'>,
+    user: Pick<UserModel, "email" | "password" | "gender" | "phone" | "name">,
   ) {
     await this.duplicateValidation(user.email, user.phone);
 
@@ -32,7 +32,7 @@ export class UserService {
 
   async findAllUsers() {
     return await this.userRepository.find({
-      relations: ['memberships', 'createGroups'],
+      relations: ["memberships", "createGroups"],
     });
   }
 
@@ -50,11 +50,11 @@ export class UserService {
     const phoneExists = await this.userRepository.existsBy({ phone });
 
     if (emailExists) {
-      throw new BadRequestException('이미 존재하는 이메일입니다.');
+      throw new BadRequestException("이미 존재하는 이메일입니다.");
     }
 
     if (phoneExists) {
-      throw new BadRequestException('이미 존재하는 휴대전화입니다.');
+      throw new BadRequestException("이미 존재하는 휴대전화입니다.");
     }
   }
 }

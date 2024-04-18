@@ -5,9 +5,9 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { MembershipModel } from '../../group-user/entity/membership.entity';
-import { UserModel } from '../../user/entity/user.entity';
+} from "typeorm";
+import { MembershipModel } from "../../group-user/entity/membership.entity";
+import { UserModel } from "../../user/entity/user.entity";
 
 @Entity()
 export class GroupModel {
@@ -21,6 +21,6 @@ export class GroupModel {
   description: string;
 
   @ManyToOne(() => UserModel)
-  @JoinColumn({ name: 'creatorId' })
+  @JoinColumn({ name: "creatorId" })
   creator: UserModel;
 }

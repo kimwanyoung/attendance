@@ -2,13 +2,13 @@ import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { UserService } from '../user/user.service';
-import { JwtService } from '@nestjs/jwt';
-import { RegisterUserDto } from './dto/register-user.dto';
-import * as bcrypt from 'bcrypt';
-import { HASH_ROUND, JWT_SECRET } from './const/auth.const';
-import { UserModel } from '../user/entity/user.entity';
+} from "@nestjs/common";
+import { UserService } from "../user/user.service";
+import { JwtService } from "@nestjs/jwt";
+import { RegisterUserDto } from "./dto/register-user.dto";
+import * as bcrypt from "bcrypt";
+import { HASH_ROUND, JWT_SECRET } from "./const/auth.const";
+import { UserModel } from "../user/entity/user.entity";
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
     return this.login({ email: user.email, password: user.password });
   }
 
-  async login(user: Pick<UserModel, 'email' | 'password'>) {
+  async login(user: Pick<UserModel, "email" | "password">) {
     const existUser = await this.userValidate(user);
 
     return {
@@ -41,27 +41,27 @@ export class AuthService {
         secret: JWT_SECRET,
       });
     } catch (e) {
-      throw new UnauthorizedException('토큰이 만료됐거나 잘못된 토큰입니다.');
+      throw new UnauthorizedException("토큰이 만료됐거나 잘못된 토큰입니다.");
     }
   }
 
   extractTokenFromHeader(header: string, isBearer: boolean) {
-    const splitToken = header.split(' ');
-    const prefix = isBearer ? 'Bearer' : 'Basic';
+    const splitToken = header.split(" ");
+    const prefix = isBearer ? "Bearer" : "Basic";
 
     if (splitToken.length !== 2 || splitToken[0] !== prefix) {
-      throw new UnauthorizedException('잘못된 토큰입니다.');
+      throw new UnauthorizedException("잘못된 토큰입니다.");
     }
 
     return splitToken[1];
   }
 
   decodeBasicToken(base64string: string) {
-    const decode = Buffer.from(base64string).toString('utf-8');
-    const splited = decode.split(':');
+    const decode = Buffer.from(base64string).toString("utf-8");
+    const splited = decode.split(":");
 
     if (splited.length !== 2) {
-      throw new UnauthorizedException('잘못된 유형의 토큰입니다.');
+      throw new UnauthorizedException("잘못된 유형의 토큰입니다.");
     }
 
     return {
@@ -75,9 +75,9 @@ export class AuthService {
       secret: JWT_SECRET,
     });
 
-    if (decoded.type !== 'refresh') {
+    if (decoded.type !== "refresh") {
       throw new UnauthorizedException(
-        '토큰 재발급은 RefreshToken으로만 가능합니다.',
+        "토큰 재발급은 RefreshToken으로만 가능합니다.",
       );
     }
 
@@ -85,28 +85,28 @@ export class AuthService {
   }
 
   async authenticateWithEmailAndPassword(
-    user: Pick<UserModel, 'email' | 'password'>,
+    user: Pick<UserModel, "email" | "password">,
   ) {
     const existUser = await this.userService.findUserByEmail(user.email);
 
     if (!existUser) {
-      throw new UnauthorizedException('존재하지 않는 사용자입니다.');
+      throw new UnauthorizedException("존재하지 않는 사용자입니다.");
     }
 
     const passOk = bcrypt.compare(user.password, existUser.password);
 
     if (!passOk) {
-      throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+      throw new UnauthorizedException("비밀번호가 틀렸습니다.");
     }
 
     return existUser;
   }
 
-  private async userValidate(user: Pick<UserModel, 'email' | 'password'>) {
+  private async userValidate(user: Pick<UserModel, "email" | "password">) {
     const existUser = await this.existUserValidate(user.email);
     const passOk = await bcrypt.compare(user.password, existUser.password);
     if (!passOk) {
-      throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+      throw new UnauthorizedException("비밀번호가 틀렸습니다.");
     }
 
     return existUser;
@@ -116,20 +116,20 @@ export class AuthService {
     const existUser = await this.userService.findUserByEmail(email);
 
     if (!existUser) {
-      throw new BadRequestException('존재하지않는 이메일입니다.');
+      throw new BadRequestException("존재하지않는 이메일입니다.");
     }
 
     return existUser;
   }
 
   private signToken(
-    user: Pick<UserModel, 'email' | 'name'>,
+    user: Pick<UserModel, "email" | "name">,
     isRefreshToken: boolean,
   ) {
     const payload = {
       email: user.email,
       name: user.name,
-      type: isRefreshToken ? 'refresh' : 'access',
+      type: isRefreshToken ? "refresh" : "access",
     };
 
     return this.jwtService.sign(payload, {

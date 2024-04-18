@@ -3,8 +3,8 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { AuthService } from '../auth.service';
+} from "@nestjs/common";
+import { AuthService } from "../auth.service";
 
 @Injectable()
 export class BasicTokenGuard implements CanActivate {
@@ -12,10 +12,10 @@ export class BasicTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const rawToken = request.headers['authorization'];
+    const rawToken = request.headers["authorization"];
 
     if (!rawToken) {
-      throw new UnauthorizedException('토큰이 존재하지 않습니다.');
+      throw new UnauthorizedException("토큰이 존재하지 않습니다.");
     }
 
     const token = this.authService.extractTokenFromHeader(rawToken, false);

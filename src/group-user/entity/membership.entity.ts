@@ -4,10 +4,10 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { UserModel } from '../../user/entity/user.entity';
-import { GroupModel } from '../../group/entity/group.entity';
-import { Status } from '../const/status.const';
+} from "typeorm";
+import { UserModel } from "../../user/entity/user.entity";
+import { GroupModel } from "../../group/entity/group.entity";
+import { Status } from "../const/status.const";
 
 @Entity()
 export class MembershipModel {
@@ -21,7 +21,7 @@ export class MembershipModel {
   group: GroupModel;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: Status,
     default: Status.PENDING,
   })
