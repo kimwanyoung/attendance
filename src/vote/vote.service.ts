@@ -1,7 +1,7 @@
 import {
   forwardRef,
   Inject,
-  Injectable,
+  Injectable, Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { Repository } from "typeorm";
@@ -11,6 +11,7 @@ import { UpdateVoteDto } from "./dto/update-vote.dto";
 import { GroupService } from "../group/group.service";
 import { PostService } from "../post/post.service";
 import { UserService } from "../user/user.service";
+import { VoteStatus } from "./const/vote.const";
 
 @Injectable()
 export class VoteService {
@@ -58,11 +59,24 @@ export class VoteService {
     return await this.voteRepository.save(vote);
   }
 
-  async findVotesByPostId(postId: number) {
-    return await this.voteRepository.find({
+  async findVotesByPostId(userId: number, postId: number) {
+    const votes = await this.voteRepository.find({
       where: {
         post: { id: postId },
       },
+      relations: ["user"],
     });
+
+    let userStatus: VoteStatus;
+    const filteredVotes = votes.filter((vote) => vote.user.id === userId);
+    if (filteredVotes.length === 0) {
+      userStatus = VoteStatus.NOT_VOTED_YET;
+    } else {
+      userStatus = votes.find((vote) => vote.user.id === userId).voteStatus;
+    }
+    return {
+      currentUserStatus: userStatus,
+      allVotes: votes,
+    };
   }
 }

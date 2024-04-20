@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Get,
   Param,
   Post,
   Request,
@@ -30,5 +30,15 @@ export class VoteController {
       postId,
       voteStatus,
     });
+  }
+
+  @Get("/:postId")
+  @UseGuards(AccessTokenGuard)
+  async getVotesByPostId(
+    @Request() request: any,
+    @Param("postId") postId: number,
+  ) {
+    const user = request.user;
+    return await this.voteService.findVotesByPostId(user.id, postId);
   }
 }

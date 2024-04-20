@@ -13,7 +13,8 @@ import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
 
 @Controller("group")
 export class GroupController {
-  constructor(private readonly groupService: GroupService) {}
+  constructor(private readonly groupService: GroupService) {
+  }
 
   @Get(":groupId")
   async findGroup(@Param("groupId") groupId: number) {
@@ -27,7 +28,6 @@ export class GroupController {
     @Param("groupId") groupId: number,
     @Param("postId") postId: number,
   ) {
-    const user = request.user;
     return await this.groupService.findPostDetail(groupId, postId);
   }
 
