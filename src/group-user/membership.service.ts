@@ -1,21 +1,18 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserModel } from "../user/entity/user.entity";
 import { Repository } from "typeorm";
 import { MembershipModel } from "./entity/membership.entity";
 import { Status } from "./const/status.const";
 import { ApprovalDto } from "./dto/approval.dto";
+import { GroupService } from "../group/group.service";
 
 @Injectable()
 export class MembershipService {
   constructor(
     @InjectRepository(MembershipModel)
     private readonly membershipRepository: Repository<MembershipModel>,
+    private readonly groupService: GroupService,
   ) {}
 
   async applyToJoinGroup(user: UserModel, groupId: number) {
@@ -39,7 +36,7 @@ export class MembershipService {
     return this.membershipRepository.save(membership);
   }
 
-  async approvalJoinGroup(creatorId: number, approvalDto: ApprovalDto) {
+  async approvalOrRejectJoinGroup(creatorId: number, approvalDto: ApprovalDto) {
     const { userId, groupId } = approvalDto;
     const findGroup = await this.membershipRepository.findOne({
       where: {
@@ -60,9 +57,10 @@ export class MembershipService {
       where: {
         group: { id: groupId },
         user: { id: userId },
+        status: Status.PENDING,
       },
     });
-    findUser.status = Status.APPROVED;
+    findUser.status = approvalDto.status;
     return await this.membershipRepository.save(findUser);
   }
 
@@ -91,5 +89,20 @@ export class MembershipService {
       ...group,
       memberCount: parseInt(group.memberCount, 10),
     }));
+  }
+
+  async findAllWaitUserByGroupId(userId: number, groupId: number) {
+    const group = await this.groupService.findGroupById(groupId);
+    if (group.creator.id !== userId) {
+      throw new UnauthorizedException("그룹 생성자만 접근 가능합니다.");
+    }
+
+    return await this.membershipRepository.find({
+      where: {
+        group: { id: groupId },
+        status: Status.PENDING,
+      },
+      relations: ["user"],
+    });
   }
 }

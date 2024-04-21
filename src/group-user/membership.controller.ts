@@ -22,7 +22,7 @@ export class MembershipController {
     @Body() approvalData: ApprovalDto,
   ) {
     const creator = request.user;
-    return await this.groupUserService.approvalJoinGroup(
+    return await this.groupUserService.approvalOrRejectJoinGroup(
       creator.id,
       approvalData,
     );
@@ -40,5 +40,15 @@ export class MembershipController {
   async findAllGroupsByUserId(@Request() request: any) {
     const userId = request.user.id;
     return await this.groupUserService.findAllGroupsByUserId(userId);
+  }
+
+  @Get("pendingList/:groupId")
+  @UseGuards(AccessTokenGuard)
+  async findAllWaitUserByGroupId(
+    @Request() request: any,
+    @Param("groupId") groupId: number,
+  ) {
+    const userId = request.user.id;
+    return this.groupUserService.findAllWaitUserByGroupId(userId, groupId);
   }
 }
