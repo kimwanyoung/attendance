@@ -80,7 +80,8 @@ export class MembershipService {
         return subQuery
           .select("COUNT(membership.id)", "memberCount")
           .from(MembershipModel, "membership")
-          .where("membership.groupId = group.id");
+          .where("membership.groupId = group.id")
+          .andWhere("membership.status = :status", { status: Status.APPROVED });
       }, "memberCount")
       .groupBy("group.id")
       .getRawMany();

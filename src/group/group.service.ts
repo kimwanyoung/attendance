@@ -70,6 +70,7 @@ export class GroupService {
 
     return await this.groupRepository.find({
       where: whereConditions,
+      relations: ["creator"],
     });
   }
 }
