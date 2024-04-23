@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Param,
-  Post,
+  Post, Query,
   Request,
   UseGuards,
 } from "@nestjs/common";
@@ -36,5 +36,14 @@ export class GroupController {
   async createNewGroup(@Request() request: any, @Body() body: CreateGroupDto) {
     const user = request.user;
     return await this.groupService.createNewGroup(user, body);
+  }
+
+  @Get()
+  @UseGuards(AccessTokenGuard)
+  async findGroupsByName(
+    @Query("groupName") groupName: string,
+    @Query("groupCreatorName") groupCreatorName: string,
+  ) {
+    return await this.groupService.findGroupByName(groupName, groupCreatorName);
   }
 }

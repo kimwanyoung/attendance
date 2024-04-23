@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
-import { EntityManager, Repository } from "typeorm";
+import { EntityManager, Like, Repository } from "typeorm";
 import { GroupModel } from "./entity/group.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateGroupDto } from "./dto/create-group.dto";
@@ -51,5 +51,25 @@ export class GroupService {
 
   async findPostDetail(groupId: number, postId: number) {
     return await this.postService.findPostById(groupId, postId);
+  }
+
+  async findGroupByName(groupName: string, groupCreatorName: string) {
+    const whereConditions = {};
+
+    if (groupName.trim()) {
+      whereConditions["title"] = Like(`%${groupName}%`);
+    }
+
+    if (groupCreatorName.trim()) {
+      whereConditions["creator"] = { name: groupCreatorName };
+    }
+
+    if (!groupName.trim() && groupCreatorName.trim()) {
+      return [];
+    }
+
+    return await this.groupRepository.find({
+      where: whereConditions,
+    });
   }
 }
