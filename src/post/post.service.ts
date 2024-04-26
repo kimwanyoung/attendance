@@ -20,9 +20,6 @@ export class PostService {
     private readonly postRepository: Repository<PostModel>,
     @Inject(forwardRef(() => GroupService))
     private readonly groupService: GroupService,
-    @Inject(forwardRef(() => VoteService))
-    private readonly voteService: VoteService,
-    private readonly entityManager: EntityManager,
   ) {}
 
   async createPost(user: UserModel, groupId: number, postData: CreatePostDto) {
@@ -46,12 +43,17 @@ export class PostService {
   }
 
   async findAllPosts(groupId: number) {
-    return await this.postRepository.find({
+    const group = await this.groupService.findGroupById(groupId);
+    const posts = await this.postRepository.find({
       where: {
         group: { id: groupId },
       },
       relations: ["author"],
     });
+    return {
+      group,
+      posts,
+    };
   }
 
   async findPostById(groupId: number, postId: number) {
