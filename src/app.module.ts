@@ -14,6 +14,8 @@ import { PostModule } from "./post/post.module";
 import { VoteModule } from "./vote/vote.module";
 import { PostModel } from "./post/entity/post.entity";
 import { VoteModel } from "./vote/entities/vote.entity";
+import { NoticeModule } from './notice/notice.module';
+import { NoticeModel } from "./notice/entity/notice.entity";
 
 @Module({
   imports: [
@@ -25,7 +27,14 @@ import { VoteModel } from "./vote/entities/vote.entity";
       username: "postgres",
       password: "postgres",
       database: "postgres",
-      entities: [UserModel, GroupModel, MembershipModel, PostModel, VoteModel],
+      entities: [
+        UserModel,
+        GroupModel,
+        MembershipModel,
+        PostModel,
+        VoteModel,
+        NoticeModel,
+      ],
       synchronize: true,
     }),
     AuthModule,
@@ -33,6 +42,7 @@ import { VoteModel } from "./vote/entities/vote.entity";
     MembershipModule,
     PostModule,
     VoteModule,
+    NoticeModule,
   ],
   controllers: [AppController],
   providers: [
