@@ -7,15 +7,16 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { NoticeService } from "./notice.service";
-import { AuthorizationManagementGuard } from "../auth/guards/bearer-token.guard";
+import { AccessTokenGuard} from "../auth/guards/bearer-token.guard";
 import { NoticeDto } from "./dto/notice.dto";
+import { AuthorizationManagementGuard } from "../core/guards/authorization-management.guard";
 
 @Controller("notice")
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 
   @Post(":groupId")
-  @UseGuards(AuthorizationManagementGuard)
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
   async createNotice(
     @Request() request: any,
     @Body() data: NoticeDto,

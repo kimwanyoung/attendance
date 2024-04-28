@@ -67,27 +67,3 @@ export class RefreshTokenGuard extends BearerTokenGuard {
   }
 }
 
-@Injectable()
-export class AuthorizationManagementGuard extends BearerTokenGuard {
-  constructor(
-    protected readonly authService: AuthService,
-    protected readonly userService: UserService,
-    private readonly groupService: GroupService,
-  ) {
-    super(authService, userService);
-  }
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    await super.canActivate(context);
-    const request = context.switchToHttp().getRequest();
-
-    const groupId = request.body["groupId"];
-    const group = await this.groupService.findGroupById(groupId);
-
-    if (request.user.id !== group.creator.id) {
-      throw new UnauthorizedException("권한이 없습니다.");
-    }
-
-    return true;
-  }
-}

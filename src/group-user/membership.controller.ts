@@ -8,15 +8,18 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { MembershipService } from "./membership.service";
-import { AccessTokenGuard, AuthorizationManagementGuard } from "../auth/guards/bearer-token.guard";
+import {
+  AccessTokenGuard,
+} from "../auth/guards/bearer-token.guard";
 import { ApprovalDto } from "./dto/approval.dto";
+import { AuthorizationManagementGuard } from "../core/guards/authorization-management.guard";
 
 @Controller("membership")
 export class MembershipController {
   constructor(private readonly groupUserService: MembershipService) {}
 
   @Post("approval")
-  @UseGuards(AuthorizationManagementGuard)
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
   async approvalUser(@Body() approvalData: ApprovalDto) {
     return await this.groupUserService.approvalOrRejectJoinGroup(approvalData);
   }
@@ -36,7 +39,7 @@ export class MembershipController {
   }
 
   @Get("pendingList/:groupId")
-  @UseGuards(AuthorizationManagementGuard)
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
   async findAllWaitUserByGroupId(@Param("groupId") groupId: number) {
     return this.groupUserService.findAllWaitUserByGroupId(groupId);
   }
