@@ -23,12 +23,8 @@ export class PostService {
   ) {}
 
   async createPost(user: UserModel, groupId: number, postData: CreatePostDto) {
-    await this.isCreatorValidation(user.id, groupId);
-
     const group = await this.groupService.findGroupById(groupId);
-
     const endDate = calculateEndDate(postData.voteDuration);
-
     const post = this.postRepository.create({
       author: user,
       group,
@@ -64,12 +60,5 @@ export class PostService {
       },
       relations: ["author"],
     });
-  }
-
-  private async isCreatorValidation(userId: number, groupId: number) {
-    const group = await this.groupService.findGroupById(groupId);
-    if (userId !== group.creator.id) {
-      throw new UnauthorizedException("글 작성 권한이 없습니다.");
-    }
   }
 }

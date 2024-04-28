@@ -7,7 +7,6 @@ import { UserModel } from "../user/entity/user.entity";
 import { MembershipModel } from "../group-user/entity/membership.entity";
 import { Status } from "../group-user/const/status.const";
 import { PostService } from "../post/post.service";
-import { PostModule } from "../post/post.module";
 
 @Injectable()
 export class GroupService {

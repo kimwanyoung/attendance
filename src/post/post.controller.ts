@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { PostService } from "./post.service";
-import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
+import { AccessTokenGuard, AuthorizationManagementGuard } from "../auth/guards/bearer-token.guard";
 import { CreatePostDto } from "./dto/create-post.dto";
 
 @Controller("post")
@@ -22,7 +22,7 @@ export class PostController {
   }
 
   @Post(":groupId")
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AuthorizationManagementGuard)
   async createPost(
     @Request() request: any,
     @Param("groupId") groupId: number,

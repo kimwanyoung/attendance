@@ -1,6 +1,13 @@
-import { Body, Controller, Param, Post, Request, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from "@nestjs/common";
 import { NoticeService } from "./notice.service";
-import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
+import { AuthorizationManagementGuard } from "../auth/guards/bearer-token.guard";
 import { NoticeDto } from "./dto/notice.dto";
 
 @Controller("notice")
@@ -8,7 +15,7 @@ export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 
   @Post(":groupId")
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AuthorizationManagementGuard)
   async createNotice(
     @Request() request: any,
     @Body() data: NoticeDto,

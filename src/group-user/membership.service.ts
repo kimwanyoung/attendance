@@ -36,7 +36,7 @@ export class MembershipService {
     return this.membershipRepository.save(membership);
   }
 
-  async approvalOrRejectJoinGroup(creatorId: number, approvalDto: ApprovalDto) {
+  async approvalOrRejectJoinGroup(approvalDto: ApprovalDto) {
     const { userId, groupId } = approvalDto;
     const findGroup = await this.membershipRepository.findOne({
       where: {
@@ -47,10 +47,6 @@ export class MembershipService {
 
     if (!findGroup) {
       throw new NotFoundException("그룹이 없습니다.");
-    }
-
-    if (creatorId !== findGroup.group.creator.id) {
-      throw new UnauthorizedException("권한이 없습니다.");
     }
 
     const findUser = await this.membershipRepository.findOne({
@@ -92,12 +88,7 @@ export class MembershipService {
     }));
   }
 
-  async findAllWaitUserByGroupId(userId: number, groupId: number) {
-    const group = await this.groupService.findGroupById(groupId);
-    if (group.creator.id !== userId) {
-      throw new UnauthorizedException("그룹 생성자만 접근 가능합니다.");
-    }
-
+  async findAllWaitUserByGroupId(groupId: number) {
     return await this.membershipRepository.find({
       where: {
         group: { id: groupId },
