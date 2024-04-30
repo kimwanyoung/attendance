@@ -8,9 +8,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { MembershipService } from "./membership.service";
-import {
-  AccessTokenGuard,
-} from "../auth/guards/bearer-token.guard";
+import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
 import { ApprovalDto } from "./dto/approval.dto";
 import { AuthorizationManagementGuard } from "../core/guards/authorization-management.guard";
 

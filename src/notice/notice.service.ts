@@ -20,4 +20,25 @@ export class NoticeService {
 
     return await this.noticeRepository.save(notice);
   }
+
+  async findAllNotice(groupId: number) {
+    return await this.noticeRepository.find({
+      where: {
+        group: { id: groupId },
+      },
+    });
+  }
+
+  async deleteNotice(postId: number) {
+    return await this.noticeRepository.delete(postId);
+  }
+
+  async updateNotice(postId: number, dto: NoticeDto) {
+    const updatedNotice = this.noticeRepository.create({
+      id: postId,
+      ...dto,
+    });
+
+    return await this.noticeRepository.save(updatedNotice);
+  }
 }

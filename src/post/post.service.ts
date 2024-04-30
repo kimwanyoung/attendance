@@ -27,11 +27,8 @@ export class PostService {
     const endDate = calculateEndDate(postData.voteDuration);
     const post = this.postRepository.create({
       author: user,
+      ...postData,
       group,
-      title: postData.title,
-      contents: postData.contents,
-      location: postData.location,
-      eventDate: postData.eventDate,
       endDate,
     });
 
