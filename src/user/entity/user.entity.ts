@@ -13,8 +13,8 @@ import { IsEnum, IsNumber, IsString } from "class-validator";
 import { GenderEnum } from "../const/gender.enum";
 import { GroupModel } from "../../group/entity/group.entity";
 import { Exclude } from "class-transformer";
-import { MembershipModel } from "../../group-user/entity/membership.entity";
-import { Status } from "../../group-user/const/status.const";
+import { MembershipModel } from "../../membership/entity/membership.entity";
+import { Status } from "../../membership/const/status.const";
 
 @Entity()
 export class UserModel {

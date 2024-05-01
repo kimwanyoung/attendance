@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { MembershipModel } from "../../group-user/entity/membership.entity";
+import { MembershipModel } from "../../membership/entity/membership.entity";
 import { UserModel } from "../../user/entity/user.entity";
 
 @Entity()

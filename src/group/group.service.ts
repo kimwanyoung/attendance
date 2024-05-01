@@ -4,8 +4,8 @@ import { GroupModel } from "./entity/group.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateGroupDto } from "./dto/create-group.dto";
 import { UserModel } from "../user/entity/user.entity";
-import { MembershipModel } from "../group-user/entity/membership.entity";
-import { Status } from "../group-user/const/status.const";
+import { MembershipModel } from "../membership/entity/membership.entity";
+import { Status } from "../membership/const/status.const";
 import { PostService } from "../post/post.service";
 
 @Injectable()
