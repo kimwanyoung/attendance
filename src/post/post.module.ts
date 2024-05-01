@@ -15,7 +15,6 @@ import { VoteModule } from "../vote/vote.module";
     AuthModule,
     UserModule,
     forwardRef(() => GroupModule),
-    forwardRef(() => VoteModule),
   ],
   exports: [PostService],
   controllers: [PostController],

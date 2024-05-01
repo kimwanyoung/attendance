@@ -16,6 +16,8 @@ import { AuthorizationManagementGuard } from "../core/guards/authorization-manag
 import { CreatePostDto } from "../post/dto/create-post.dto";
 import { VoteStatus } from "../vote/const/vote.const";
 import { VoteService } from "../vote/vote.service";
+import { NoticeDto } from "../notice/dto/notice.dto";
+import { NoticeService } from "../notice/notice.service";
 
 @Controller("group")
 export class GroupController {
@@ -23,6 +25,7 @@ export class GroupController {
     private readonly groupService: GroupService,
     private readonly postService: PostService,
     private readonly voteService: VoteService,
+    private readonly noticeService: NoticeService,
   ) {}
 
   @Get(":groupId")
@@ -97,5 +100,16 @@ export class GroupController {
   ) {
     const user = request.user;
     return await this.voteService.findVotesByPostId(user.id, postId);
+  }
+
+  @Post(":groupId/notice")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async createNotice(
+    @Request() request: any,
+    @Body() data: NoticeDto,
+    @Param("groupId") groupId: number,
+  ) {
+    const userId = request.user.id;
+    return await this.noticeService.createNotice(userId, groupId, data);
   }
 }
