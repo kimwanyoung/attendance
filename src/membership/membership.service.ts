@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserModel } from "../user/entity/user.entity";
 import { Repository } from "typeorm";
@@ -12,14 +12,13 @@ export class MembershipService {
   constructor(
     @InjectRepository(MembershipModel)
     private readonly membershipRepository: Repository<MembershipModel>,
-    private readonly groupService: GroupService,
   ) {}
 
-  async applyToJoinGroup(user: UserModel, groupId: number) {
+  async applyToJoinGroup(userId: number, groupId: number) {
     const existsUser = await this.membershipRepository.findOne({
       where: {
         group: { id: groupId },
-        user: { id: user.id },
+        user: { id: userId },
       },
     });
 
@@ -28,7 +27,7 @@ export class MembershipService {
     }
 
     const membership = this.membershipRepository.create({
-      user,
+      user: { id: userId },
       group: { id: groupId },
       status: Status.PENDING,
     });
@@ -36,8 +35,11 @@ export class MembershipService {
     return this.membershipRepository.save(membership);
   }
 
-  async approvalOrRejectJoinGroup(approvalDto: ApprovalDto) {
-    const { userId, groupId } = approvalDto;
+  async approvalOrRejectJoinGroup(
+    userId: number,
+    groupId: number,
+    status: Status,
+  ) {
     const findGroup = await this.membershipRepository.findOne({
       where: {
         group: { id: groupId },
@@ -56,7 +58,7 @@ export class MembershipService {
         status: Status.PENDING,
       },
     });
-    findUser.status = approvalDto.status;
+    findUser.status = status;
     return await this.membershipRepository.save(findUser);
   }
 

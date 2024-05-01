@@ -8,6 +8,7 @@ import { AuthModule } from "../auth/auth.module";
 import { PostModule } from "../post/post.module";
 import { VoteModule } from "../vote/vote.module";
 import { NoticeModule } from "../notice/notice.module";
+import { MembershipModule } from "../membership/membership.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { NoticeModule } from "../notice/notice.module";
     UserModule,
     VoteModule,
     NoticeModule,
+    MembershipModule,
     forwardRef(() => PostModule),
   ],
   exports: [GroupService],

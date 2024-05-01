@@ -18,6 +18,9 @@ import { VoteStatus } from "../vote/const/vote.const";
 import { VoteService } from "../vote/vote.service";
 import { NoticeDto } from "../notice/dto/notice.dto";
 import { NoticeService } from "../notice/notice.service";
+import { ApprovalDto } from "../membership/dto/approval.dto";
+import { MembershipService } from "../membership/membership.service";
+import { Status } from "../membership/const/status.const";
 
 @Controller("group")
 export class GroupController {
@@ -26,6 +29,7 @@ export class GroupController {
     private readonly postService: PostService,
     private readonly voteService: VoteService,
     private readonly noticeService: NoticeService,
+    private readonly membershipService: MembershipService,
   ) {}
 
   @Get(":groupId")
@@ -111,5 +115,32 @@ export class GroupController {
   ) {
     const userId = request.user.id;
     return await this.noticeService.createNotice(userId, groupId, data);
+  }
+
+  @Post(":groupId/membership/approval")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async approvalUser(
+    @Param("groupId") groupId: number,
+    @Query("userId") userId: number,
+    @Query("status") status: Status,
+  ) {
+    return await this.membershipService.approvalOrRejectJoinGroup(
+      userId,
+      groupId,
+      status,
+    );
+  }
+
+  @Post(":groupId/membership/apply")
+  @UseGuards(AccessTokenGuard)
+  async applyUser(@Request() request: any, @Param("groupId") groupId: number) {
+    const userId = request.user.id;
+    return await this.membershipService.applyToJoinGroup(userId, groupId);
+  }
+
+  @Get(":groupId/membership/pending-list")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async findAllWaitUserByGroupId(@Param("groupId") groupId: number) {
+    return this.membershipService.findAllWaitUserByGroupId(groupId);
   }
 }
