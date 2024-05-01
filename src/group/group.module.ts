@@ -6,12 +6,14 @@ import { GroupModel } from "./entity/group.entity";
 import { UserModule } from "../user/user.module";
 import { AuthModule } from "../auth/auth.module";
 import { PostModule } from "../post/post.module";
+import { VoteModule } from "../vote/vote.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([GroupModel]),
     AuthModule,
     UserModule,
+    VoteModule,
     forwardRef(() => PostModule),
   ],
   exports: [GroupService],

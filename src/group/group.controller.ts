@@ -14,12 +14,15 @@ import { AccessTokenGuard } from "../auth/guards/bearer-token.guard";
 import { PostService } from "../post/post.service";
 import { AuthorizationManagementGuard } from "../core/guards/authorization-management.guard";
 import { CreatePostDto } from "../post/dto/create-post.dto";
+import { VoteStatus } from "../vote/const/vote.const";
+import { VoteService } from "../vote/vote.service";
 
 @Controller("group")
 export class GroupController {
   constructor(
     private readonly groupService: GroupService,
     private readonly postService: PostService,
+    private readonly voteService: VoteService,
   ) {}
 
   @Get(":groupId")
@@ -67,5 +70,32 @@ export class GroupController {
   ) {
     const user = request.user;
     return await this.postService.createPost(user, groupId, postData);
+  }
+
+  @Post(":groupId/post/:postId/vote")
+  @UseGuards(AccessTokenGuard)
+  async updateVote(
+    @Request() request: any,
+    @Param("groupId") groupId: number,
+    @Param("postId") postId: number,
+    @Body("voteStatus") voteStatus: VoteStatus,
+  ) {
+    const userId = request.user.id;
+    return await this.voteService.voteOnPost({
+      userId,
+      groupId,
+      postId,
+      voteStatus,
+    });
+  }
+
+  @Get(":groupId/post/:postId/vote")
+  @UseGuards(AccessTokenGuard)
+  async getVotesByPostId(
+    @Request() request: any,
+    @Param("postId") postId: number,
+  ) {
+    const user = request.user;
+    return await this.voteService.findVotesByPostId(user.id, postId);
   }
 }
