@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
-  Param, Patch,
+  Param,
+  Patch,
   Post,
   Query,
   Request,
@@ -150,6 +152,12 @@ export class GroupController {
     @Body() dto: NoticeDto,
   ) {
     return await this.noticeService.updateNotice(noticeId, dto);
+  }
+
+  @Delete(":groupId/notice/:noticeId")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async deleteNotice(@Param("noticeId") noticeId: number) {
+    return await this.noticeService.deleteNotice(noticeId);
   }
 
   /*
