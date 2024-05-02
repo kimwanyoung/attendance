@@ -29,13 +29,22 @@ export class NoticeService {
     });
   }
 
+  async findNoticeDetail(groupId: number, noticeId: number){
+    return await this.noticeRepository.findOne({
+      where: {
+        id: noticeId,
+        group: { id: groupId },
+      },
+      relations: ["author"],
+    });
+  }
   async deleteNotice(postId: number) {
     return await this.noticeRepository.delete(postId);
   }
 
-  async updateNotice(postId: number, dto: NoticeDto) {
+  async updateNotice(noticeId: number, dto: NoticeDto) {
     const updatedNotice = this.noticeRepository.create({
-      id: postId,
+      id: noticeId,
       ...dto,
     });
 

@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
+  Param, Patch,
   Post,
   Query,
   Request,
@@ -18,7 +18,6 @@ import { VoteStatus } from "../vote/const/vote.const";
 import { VoteService } from "../vote/vote.service";
 import { NoticeDto } from "../notice/dto/notice.dto";
 import { NoticeService } from "../notice/notice.service";
-import { ApprovalDto } from "../membership/dto/approval.dto";
 import { MembershipService } from "../membership/membership.service";
 import { Status } from "../membership/const/status.const";
 
@@ -32,25 +31,12 @@ export class GroupController {
     private readonly membershipService: MembershipService,
   ) {}
 
+  /*
+   그룹 조회, 생성
+   */
   @Get(":groupId")
   async findGroup(@Param("groupId") groupId: number) {
     return await this.groupService.findGroupById(groupId);
-  }
-
-  @Get(":groupId/post/:postId")
-  @UseGuards(AccessTokenGuard)
-  async findPostDetail(
-    @Param("groupId") groupId: number,
-    @Param("postId") postId: number,
-  ) {
-    return await this.postService.findPostById(groupId, postId);
-  }
-
-  @Post()
-  @UseGuards(AccessTokenGuard)
-  async createNewGroup(@Request() request: any, @Body() body: CreateGroupDto) {
-    const user = request.user;
-    return await this.groupService.createNewGroup(user, body);
   }
 
   @Get()
@@ -60,6 +46,25 @@ export class GroupController {
     @Query("groupCreatorName") groupCreatorName: string,
   ) {
     return await this.groupService.findGroupByName(groupName, groupCreatorName);
+  }
+
+  @Post()
+  @UseGuards(AccessTokenGuard)
+  async createNewGroup(@Request() request: any, @Body() body: CreateGroupDto) {
+    const user = request.user;
+    return await this.groupService.createNewGroup(user, body);
+  }
+
+  /*
+  일정 조회, 생성
+   */
+  @Get(":groupId/post/:postId")
+  @UseGuards(AccessTokenGuard)
+  async findPostDetail(
+    @Param("groupId") groupId: number,
+    @Param("postId") postId: number,
+  ) {
+    return await this.postService.findPostById(groupId, postId);
   }
 
   @Get(":groupId/post")
@@ -79,6 +84,19 @@ export class GroupController {
     return await this.postService.createPost(user, groupId, postData);
   }
 
+  /*
+  투표 조회, 생성
+   */
+  @Get(":groupId/post/:postId/vote")
+  @UseGuards(AccessTokenGuard)
+  async getVotesByPostId(
+    @Request() request: any,
+    @Param("postId") postId: number,
+  ) {
+    const user = request.user;
+    return await this.voteService.findVotesByPostId(user.id, postId);
+  }
+
   @Post(":groupId/post/:postId/vote")
   @UseGuards(AccessTokenGuard)
   async updateVote(
@@ -96,14 +114,22 @@ export class GroupController {
     });
   }
 
-  @Get(":groupId/post/:postId/vote")
+  /*
+  공지 조회, 생성
+   */
+  @Get(":groupId/notice")
   @UseGuards(AccessTokenGuard)
-  async getVotesByPostId(
-    @Request() request: any,
-    @Param("postId") postId: number,
+  async findNotices(@Param("groupId") groupId: number) {
+    return await this.noticeService.findAllNotice(groupId);
+  }
+
+  @Get(":groupId/notice/:noticeId")
+  @UseGuards(AccessTokenGuard)
+  async findOneNotice(
+    @Param("groupId") groupId: number,
+    @Param("noticeId") noticeId: number,
   ) {
-    const user = request.user;
-    return await this.voteService.findVotesByPostId(user.id, postId);
+    return await this.noticeService.findNoticeDetail(groupId, noticeId);
   }
 
   @Post(":groupId/notice")
@@ -115,6 +141,24 @@ export class GroupController {
   ) {
     const userId = request.user.id;
     return await this.noticeService.createNotice(userId, groupId, data);
+  }
+
+  @Patch(":groupId/notice/:noticeId")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async updateNotice(
+    @Param("noticeId") noticeId: number,
+    @Body() dto: NoticeDto,
+  ) {
+    return await this.noticeService.updateNotice(noticeId, dto);
+  }
+
+  /*
+  가입 요청 조회, 생성, 승인
+   */
+  @Get(":groupId/membership/pending-list")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async findAllWaitUserByGroupId(@Param("groupId") groupId: number) {
+    return this.membershipService.findAllWaitUserByGroupId(groupId);
   }
 
   @Post(":groupId/membership/approval")
@@ -136,11 +180,5 @@ export class GroupController {
   async applyUser(@Request() request: any, @Param("groupId") groupId: number) {
     const userId = request.user.id;
     return await this.membershipService.applyToJoinGroup(userId, groupId);
-  }
-
-  @Get(":groupId/membership/pending-list")
-  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
-  async findAllWaitUserByGroupId(@Param("groupId") groupId: number) {
-    return this.membershipService.findAllWaitUserByGroupId(groupId);
   }
 }
