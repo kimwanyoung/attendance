@@ -72,4 +72,14 @@ export class GroupService {
       relations: ["creator"],
     });
   }
+
+  async delete(groupId: number) {
+    const group = await this.groupRepository.findOne({
+      where: {
+        id: groupId,
+      },
+    });
+
+    return await this.groupRepository.delete(group);
+  }
 }

@@ -17,7 +17,9 @@ export class MembershipModel {
   @ManyToOne(() => UserModel)
   user: UserModel;
 
-  @ManyToOne(() => GroupModel)
+  @ManyToOne(() => GroupModel, {
+    onDelete: "CASCADE",
+  })
   group: GroupModel;
 
   @Column({

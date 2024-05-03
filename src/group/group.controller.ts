@@ -57,6 +57,12 @@ export class GroupController {
     return await this.groupService.createNewGroup(user, body);
   }
 
+  @Delete(":groupId")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async deleteGroup(@Param("groupId") groupId: number) {
+    return await this.groupService.delete(groupId);
+  }
+
   /*
   일정 조회, 생성
    */
