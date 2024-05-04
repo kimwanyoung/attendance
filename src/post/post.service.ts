@@ -1,17 +1,11 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { EntityManager, Repository } from "typeorm";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { Repository } from "typeorm";
 import { PostModel } from "./entity/post.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserModel } from "../user/entity/user.entity";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { GroupService } from "../group/group.service";
 import { calculateEndDate } from "../libs/calculateDate";
-import { VoteService } from "../vote/vote.service";
 
 @Injectable()
 export class PostService {
@@ -57,5 +51,9 @@ export class PostService {
       },
       relations: ["author"],
     });
+  }
+
+  async deletePost(postId: number) {
+    return await this.postRepository.delete(postId);
   }
 }

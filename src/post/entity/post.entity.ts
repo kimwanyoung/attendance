@@ -35,9 +35,13 @@ export class PostModel {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserModel)
+  @ManyToOne(() => UserModel, {
+    onDelete: "CASCADE",
+  })
   author: UserModel;
 
-  @ManyToOne(() => GroupModel)
+  @ManyToOne(() => GroupModel, {
+    onDelete: "CASCADE",
+  })
   group: GroupModel;
 }

@@ -92,6 +92,14 @@ export class GroupController {
     return await this.postService.createPost(user, groupId, postData);
   }
 
+  @Delete(":groupId/post/:postId")
+  @UseGuards(AccessTokenGuard, AuthorizationManagementGuard)
+  async deletePost(
+    @Param("postId") postId: number,
+  ) {
+    return await this.postService.deletePost(postId);
+  }
+
   /*
   투표 조회, 생성
    */
