@@ -1,4 +1,5 @@
 import { ClassSerializerInterceptor, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UserModule } from "./user/user.module";
@@ -14,27 +15,24 @@ import { PostModule } from "./post/post.module";
 import { VoteModule } from "./vote/vote.module";
 import { PostModel } from "./post/entity/post.entity";
 import { VoteModel } from "./vote/entities/vote.entity";
-import { NoticeModule } from './notice/notice.module';
+import { NoticeModule } from "./notice/notice.module";
 import { NoticeModel } from "./notice/entity/notice.entity";
+import * as process from "process";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UserModule,
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: "127.0.0.1",
-      port: 5432,
-      username: "postgres",
-      password: "postgres",
-      database: "postgres",
-      entities: [
-        UserModel,
-        GroupModel,
-        MembershipModel,
-        PostModel,
-        VoteModel,
-        NoticeModel,
-      ],
+      host: process.env.DB_HOSTNAME,
+      port: parseInt(process.env.DB_PORT ?? "5432"),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [__dirname + "/**/*.entity.*"],
       synchronize: true,
     }),
     AuthModule,
