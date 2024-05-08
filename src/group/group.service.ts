@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { EntityManager, Like, Repository } from "typeorm";
 import { GroupModel } from "./entity/group.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -6,15 +6,12 @@ import { CreateGroupDto } from "./dto/create-group.dto";
 import { UserModel } from "../user/entity/user.entity";
 import { MembershipModel } from "../membership/entity/membership.entity";
 import { Status } from "../membership/const/status.const";
-import { PostService } from "../post/post.service";
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectRepository(GroupModel)
     private readonly groupRepository: Repository<GroupModel>,
-    @Inject(forwardRef(() => PostService))
-    private readonly postService: PostService,
     private readonly entityManager: EntityManager,
   ) {}
 
@@ -46,10 +43,6 @@ export class GroupService {
       },
       relations: ["creator"],
     });
-  }
-
-  async findPostDetail(groupId: number, postId: number) {
-    return await this.postService.findPostById(groupId, postId);
   }
 
   async findGroupByName(groupName: string, groupCreatorName: string) {

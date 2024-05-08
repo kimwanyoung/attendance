@@ -1,7 +1,7 @@
 import {
   forwardRef,
   Inject,
-  Injectable, Logger,
+  Injectable,
   NotFoundException,
 } from "@nestjs/common";
 import { Repository } from "typeorm";

@@ -4,19 +4,13 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserModel } from "./user/entity/user.entity";
 import { AuthModule } from "./auth/auth.module";
 import { GroupModule } from "./group/group.module";
-import { GroupModel } from "./group/entity/group.entity";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { MembershipModule } from "./membership/membership.module";
-import { MembershipModel } from "./membership/entity/membership.entity";
 import { PostModule } from "./post/post.module";
 import { VoteModule } from "./vote/vote.module";
-import { PostModel } from "./post/entity/post.entity";
-import { VoteModel } from "./vote/entities/vote.entity";
 import { NoticeModule } from "./notice/notice.module";
-import { NoticeModel } from "./notice/entity/notice.entity";
 import * as process from "process";
 
 @Module({

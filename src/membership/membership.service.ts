@@ -1,11 +1,12 @@
-import { BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserModel } from "../user/entity/user.entity";
 import { Repository } from "typeorm";
 import { MembershipModel } from "./entity/membership.entity";
 import { Status } from "./const/status.const";
-import { ApprovalDto } from "./dto/approval.dto";
-import { GroupService } from "../group/group.service";
 
 @Injectable()
 export class MembershipService {

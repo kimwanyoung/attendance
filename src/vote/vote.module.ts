@@ -15,7 +15,7 @@ import { AuthModule } from "../auth/auth.module";
     forwardRef(() => GroupModule),
     UserModule,
     AuthModule,
-    forwardRef(() => PostModule),
+    PostModule,
   ],
   exports: [VoteService],
   providers: [VoteService],
