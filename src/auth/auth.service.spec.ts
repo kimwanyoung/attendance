@@ -6,6 +6,7 @@ import { UserService } from "../user/user.service";
 import { UserModel } from "../user/entity/user.entity";
 import { GenderEnum } from "../user/const/gender.enum";
 import { HASH_ROUND } from "./const/auth.const";
+import { UnauthorizedException } from "@nestjs/common";
 
 describe("AuthService", () => {
   let users: UserModel[];
@@ -62,6 +63,25 @@ describe("AuthService", () => {
       email: "dhks2869@gmail.com",
       password: "password",
     });
+
     expect(user.email).toEqual("dhks2869@gmail.com");
+  });
+
+  it("올바르지 않은 비밀번호를 입력하면 UnauthorizationException이 발생한다.", async () => {
+    const hash = await bcrypt.hash("password", HASH_ROUND);
+    await mockedUserService.createUser({
+      email: "dhks2869@gmail.com",
+      password: hash,
+      phone: "01012341234",
+      gender: GenderEnum.MALE,
+      name: "김완영",
+    });
+
+    await expect(
+      service.authenticateWithEmailAndPassword({
+        email: "dhks2869@gmail.com",
+        password: "aaaa",
+      }),
+    ).rejects.toThrow(UnauthorizedException);
   });
 });
