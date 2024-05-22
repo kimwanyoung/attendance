@@ -6,7 +6,7 @@ import { UserService } from "../user/user.service";
 import { UserModel } from "../user/entity/user.entity";
 import { GenderEnum } from "../user/const/gender.enum";
 import { HASH_ROUND } from "./const/auth.const";
-import { UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 
 describe("AuthService", () => {
   let users: UserModel[];
@@ -16,12 +16,15 @@ describe("AuthService", () => {
   beforeEach(async () => {
     users = [];
     mockedUserService = {
-      createUser: async function (
+      async createUser(
         user: Pick<
           UserModel,
           "email" | "password" | "gender" | "phone" | "name"
         >,
       ): Promise<UserModel> {
+        if (await this.findUserByEmail(user.email)) {
+          throw new BadRequestException();
+        }
         users.push(user as UserModel);
         return Promise.resolve({ ...user } as UserModel);
       },
@@ -111,5 +114,30 @@ describe("AuthService", () => {
     await expect(async () =>
       service.rotateToken(accessToken, false),
     ).rejects.toThrow(UnauthorizedException);
+  });
+
+  it("유저 정보를 입력하면 정상적으로 회원가입과 동시에 로그인 처리가 된다.", async () => {
+    const { accessToken, refreshToken } = await service.register({
+      name: "김완영",
+      email: "dhks2869@naver.com",
+      password: "password",
+      gender: GenderEnum.MALE,
+      phone: "01012341234",
+    });
+
+    expect(accessToken).toBeDefined();
+    expect(refreshToken).toBeDefined();
+  });
+
+  it("이미 존재하는 이메일로 회원가입을 하면 BadRequestException이 발생한다.", async () => {
+    await expect(
+      service.register({
+        name: "김완영",
+        email: "dhks2869@gmail.com",
+        password: "password",
+        gender: GenderEnum.MALE,
+        phone: "01012341234",
+      }),
+    ).rejects.toThrow(BadRequestException);
   });
 });
