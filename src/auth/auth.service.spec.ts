@@ -93,4 +93,23 @@ describe("AuthService", () => {
       }),
     ).rejects.toThrow(UnauthorizedException);
   });
+
+  it("refresh token으로 토큰 재발급을 요청하면 access token을 반환한다.", async () => {
+    const { refreshToken } = await service.login({
+      email: "dhks2869@gmail.com",
+      password: "password",
+    });
+    expect(service.rotateToken(refreshToken, false)).toBeDefined();
+  });
+
+  it("refresh token이 아닌 토큰으로 재발급을 요청하면 UnauthorizedException이 발생한다.", async () => {
+    const { accessToken } = await service.login({
+      email: "dhks2869@gmail.com",
+      password: "password",
+    });
+
+    await expect(async () =>
+      service.rotateToken(accessToken, false),
+    ).rejects.toThrow(UnauthorizedException);
+  });
 });
